@@ -1,0 +1,36 @@
+{
+    "name": "antoniokadid/wappkit-core-programmability",
+    "description": "A PHP library that allows user code to be executed and produce results similar to a template engine.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Antonio Kadid",
+            "email": "antoniokadid@gmail.com",
+            "homepage": "http://www.antoniokadid.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "antoniokadid/wappkit-core-io": ">=1.0",
+        "antoniokadid/wappkit-core-collections": ">=2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    },
+    "autoload": {
+        "psr-4": {
+            "AntonioKadid\\WAPPKitCore\\Programmability\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AntonioKadid\\WAPPKitCore\\Programmability\\": "src/",
+            "AntonioKadid\\WAPPKitCore\\Tests\\Programmability\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit --testdox tests"
+    }
+}

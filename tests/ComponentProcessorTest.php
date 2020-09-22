@@ -50,4 +50,19 @@ EOT;
         $result = $this->_processor->processContent('Testing: #{{Powerful122}} world!');
         $this->assertEquals('Testing: #{{Powerful122}} world!', $result);
     }
+
+    public function testDescribe()
+    {
+        $result = ComponentProcessor::describe('Powerful');
+        $this->assertEquals('#{{Powerful}}', $result);
+
+        $result = ComponentProcessor::describe('Powerful', ['name' => 'The name', 'surname' => 'The surname']);
+        $this->assertEquals('#{{Powerful name=The+name&surname=The+surname}}', $result);
+
+        $result = ComponentProcessor::describe('Powerful', [], TRUE);
+        $this->assertEquals('<AsyncComponent name="Powerful"></AsyncComponent>', $result);
+
+        $result = ComponentProcessor::describe('Powerful', ['name' => 'The name', 'surname' => 'The surname'], TRUE);
+        $this->assertEquals('<AsyncComponent name="Powerful" data-name="The+name" data-surname="The+surname"></AsyncComponent>', $result);
+    }
 }

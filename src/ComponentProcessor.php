@@ -43,11 +43,50 @@ class ComponentProcessor
     }
 
     /**
-     * @param string                $content
-     *
-     * @param ExecutionContext|null $context
+     * @param string $name
+     * @param array  $parameters
+     * @param bool   $async
      *
      * @return string
+     */
+    public static function describe(string $name, array $parameters = [], bool $async = FALSE): string
+    {
+        if ($async) {
+            if (empty($parameters))
+                return sprintf('<AsyncComponent name="%s"></AsyncComponent>', $name);
+
+            $keys = array_keys($parameters);
+            $values = array_values($parameters);
+
+            array_walk($keys, function (&$key) {
+                $key = preg_replace_callback('/([[:lower:]]|[[:digit:]])([[:upper:]]|[[:digit:]])/', function ($matches) {
+                    return sprintf('%s-%s', $matches[1], strtolower($matches[2]));
+                }, $key);
+            });
+
+            $parameters = [];
+            foreach (array_combine($keys, $values) as $key => $value)
+                $parameters[] = sprintf('data-%s="%s"', $key, urlencode($value));
+
+            return sprintf('<AsyncComponent name="%s" %s></AsyncComponent>', $name, implode(' ', $parameters));
+        }
+
+        if (empty($parameters))
+            return sprintf('#{{%s}}', $name);
+
+        $httpQuery = http_build_query($parameters);
+
+        return sprintf('#{{%s %s}}', $name, $httpQuery);
+    }
+
+    /**
+     * @param string                $content
+     * @param ExecutionContext|null $context
+     *
+     * @return string|null
+     *
+     * @throws IOException
+     * @throws ProgrammabilityException
      */
     public function processContent(string $content, ExecutionContext $context = NULL): ?string
     {
